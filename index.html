@@ -21,6 +21,12 @@
       margin-left: 0.83em;
     }
 
+    .version {
+      font-size: 0.75rem;
+      font-weight: normal;
+      color: #666;
+    }
+
     .quote-line {
       margin-left: calc(2 * 0.83em);
       font-size: 0.85rem;
@@ -53,6 +59,11 @@
     }
 
     @media (max-width: 480px) {
+      body {
+        margin: 0;
+        padding: 8px;
+        padding-bottom: 0;
+      }
       h2 {
         margin-left: 0;
       }
@@ -63,15 +74,19 @@
       #frame {
         width: 100vw;
         height: auto;
-        margin-left: 0;
+        margin-left: -8px;
       }
       #dither {
         width: 100%;
         height: 100%;
       }
       .contacts {
-        margin-left: 0;
-        max-width: 100%;
+        margin-left: -8px;
+        margin-right: -8px;
+        padding-left: 8px;
+        padding-right: 8px;
+        max-width: none;
+        width: calc(100% + 16px);
       }
     }
 
@@ -121,6 +136,9 @@
       .quote-line {
         color: #888;
       }
+      .version {
+        color: #888;
+      }
       .contacts {
         border-color: #333;
       }
@@ -135,7 +153,7 @@
   </style>
 </head>
 <body>
-  <h2>ALEX DECLINO</h2>
+  <h2>ALEX DECLINO <span class="version">v.0.0.2</span></h2>
   <div class="quote-line"><span id="quote"></span> <span id="dice" onclick="loadQuote()">[꩜]</span></div>
 
   <div id="frame">
