@@ -87,42 +87,22 @@
       }
     }
 
-    html, body {
-      margin: 0;
-      padding: 0;
+    html {
       overflow: hidden;
       width: 100vw;
       height: 100vh;
     }
 
-    #fill {
-      white-space: pre;
-      font-size: 0.85rem;
-      line-height: 1.3rem;
-      color: #111;
-      padding: 4px;
+    body {
       overflow: hidden;
+      width: 100vw;
+      height: 100vh;
     }
 
-    @media (prefers-color-scheme: dark) {
-      #fill {
-        color: #eeeeee;
-      }
-    }
   </style>
 </head>
 <body>
-  <div id="fill"></div>
-  <script>
-    const TEXT = 'DECLINO SYSTEMS v.0.0.0 ';
-    const el = document.getElementById('fill');
-    const charW = 8;
-    const lineH = 20;
-    const cols = Math.ceil(window.innerWidth / charW);
-    const rows = Math.ceil(window.innerHeight / lineH);
-    const line = TEXT.repeat(Math.ceil((cols * charW) / (TEXT.length * charW)) + 1);
-    el.textContent = (line + '\n').repeat(rows);
-  </script>
+  <h2>DECLINO SYSTEMS <span class="version">v.0.0.0</span></h2>
 
   <script>
     const QUOTES_API = 'https://api.are.na/v2/channels/npc-dialogues?per=100';
@@ -155,11 +135,13 @@
 
         for (const word of words) {
           history.replaceState(null, '', '#' + encodeURIComponent(word));
-          await sleep(500);
+          await sleep(700);
         }
 
-        history.replaceState(null, '', ' ');
-        await sleep(3000);
+        for (let i = 1; i <= 10; i++) {
+          history.replaceState(null, '', '#' + '.'.repeat(i));
+          await sleep(300);
+        }
       }
     }
 
