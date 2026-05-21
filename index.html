@@ -103,18 +103,28 @@
 </head>
 <body>
   <h2>DECLINO SYSTEMS <span class="version">v.0.0.0</span></h2>
-  <div class="quote-line">(under construction)</div>
-  <div class="quote-line"><a href="https://instagram.com/alexdeclino" target="_blank">@alexdeclino</a></div>
+  <div class="quote-line" style="margin-top: 1.3rem;"><a href="https://instagram.com/alexdeclino" target="_blank" style="color: #FFD700;">@alexdeclino</a></div>
+  <div class="quote-line" style="margin-top: 1.3rem;">(under construction)</div>
 
   <script>
-    const QUOTES_API = 'https://api.are.na/v2/channels/npc-dialogues?per=100';
+    const QUOTES_BASE = 'https://api.are.na/v2/channels/npc-dialogues';
     let texts = [];
 
     async function fetchQuotes() {
       try {
-        const res = await fetch(QUOTES_API);
-        const data = await res.json();
-        texts = data.contents
+        let page = 1;
+        let totalPages = 1;
+        const all = [];
+
+        do {
+          const res = await fetch(`${QUOTES_BASE}?per=100&page=${page}`);
+          const data = await res.json();
+          totalPages = data.total_pages || 1;
+          all.push(...data.contents);
+          page++;
+        } while (page <= totalPages);
+
+        texts = all
           .filter(b => b.class === 'Text')
           .map(b => b.content.trim())
           .filter(t => t.length > 0);
@@ -127,6 +137,9 @@
       return new Promise(r => setTimeout(r, ms));
     }
 
+    const WORD_MS = 600;
+    const DOT_MS = WORD_MS / 2;
+
     async function runLoop() {
       await fetchQuotes();
       if (texts.length === 0) return;
@@ -136,13 +149,15 @@
         const words = sentence.split(/\s+/).filter(w => w.length > 0);
 
         for (const word of words) {
-          history.replaceState(null, '', '#' + encodeURIComponent(word));
-          await sleep(700);
+          const clean = word.replace(/[^a-zA-Z0-9]/g, '');
+          if (!clean) continue;
+          history.replaceState(null, '', '#' + clean);
+          await sleep(WORD_MS);
         }
 
         for (let i = 1; i <= 10; i++) {
           history.replaceState(null, '', '#' + '.'.repeat(i));
-          await sleep(700);
+          await sleep(DOT_MS);
         }
       }
     }
