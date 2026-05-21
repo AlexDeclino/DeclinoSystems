@@ -87,24 +87,34 @@
       }
     }
 
-    html {
-      overflow: hidden;
-      width: 100vw;
-      height: 100vh;
-    }
-
-    body {
-      overflow: hidden;
-      width: 100vw;
-      height: 100vh;
-    }
 
   </style>
 </head>
 <body>
   <h2>DECLINO SYSTEMS <span class="version">v.0.0.0</span></h2>
   <div class="quote-line" style="margin-top: 1.3rem;"><a href="https://instagram.com/alexdeclino" target="_blank" style="color: #FFD700;">@alexdeclino</a></div>
+  <div class="quote-line"><a href="https://instagram.com/sybil.gg" target="_blank" style="color: #FFD700;">@sybil.gg</a></div>
   <div class="quote-line" style="margin-top: 1.3rem;">(under construction)</div>
+
+  <div class="quote-line" style="margin-top: 1.3rem;">upcoming events:</div>
+  <ul id="events" class="quote-line" style="list-style: disc; padding-left: 2.5em; margin-top: 0.3rem;"></ul>
+
+  <script>
+    fetch('events.json')
+      .then(r => r.json())
+      .then(events => {
+        const ul = document.getElementById('events');
+        events.forEach(e => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = e.link;
+          a.target = '_blank';
+          a.textContent = `${e.name} at ${e.location}, ${e.date}, ${e.city}`;
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+      });
+  </script>
 
   <script>
     const QUOTES_BASE = 'https://api.are.na/v2/channels/npc-dialogues';
