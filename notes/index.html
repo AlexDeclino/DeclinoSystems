@@ -52,32 +52,18 @@
     }
 
     @media (max-width: 480px) {
-      h2 {
-        margin-left: 0;
-      }
-      .line {
-        margin-left: 0;
-      }
+      h2 { margin-left: 0; }
+      .line { margin-left: 0; }
     }
 
     @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #111111;
-        color: #eeeeee;
-      }
-      .line {
-        color: #888;
-      }
-      .version {
-        color: #888;
-      }
+      body { background-color: #111111; color: #eeeeee; }
+      .line { color: #888; }
+      .version { color: #888; }
     }
 
     @media (prefers-color-scheme: light) {
-      body {
-        background-color: #ffffff;
-        color: #111111;
-      }
+      body { background-color: #ffffff; color: #111111; }
     }
   </style>
 </head>
@@ -86,8 +72,36 @@
   <div class="line" style="margin-top: 1.3rem;"><a href="/">← home</a></div>
 
   <div class="line" style="margin-top: 1.3rem;">notes:</div>
-  <ul class="notes-list line" style="margin-top: 0.3rem;">
-    <li><a href="on-personality">On Personality</a> — Jun 6, 2026</li>
-  </ul>
+  <ul id="notes-list" class="notes-list line"></ul>
+
+  <script>
+    fetch('manifest.json')
+      .then(r => r.json())
+      .then(slugs => Promise.all(
+        slugs.map(slug =>
+          fetch(`${slug}.md`)
+            .then(r => r.text())
+            .then(text => {
+              const lines = text.split('\n');
+              const title = lines[0].trim();
+              const dateStr = lines[1].trim();
+              return { slug, title, dateStr, date: new Date(dateStr) };
+            })
+        )
+      ))
+      .then(notes => {
+        notes.sort((a, b) => a.date - b.date);
+        const ul = document.getElementById('notes-list');
+        notes.forEach(n => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `note.html?note=${n.slug}`;
+          a.textContent = n.title;
+          li.appendChild(a);
+          li.appendChild(document.createTextNode(` — ${n.dateStr}`));
+          ul.appendChild(li);
+        });
+      });
+  </script>
 </body>
 </html>
