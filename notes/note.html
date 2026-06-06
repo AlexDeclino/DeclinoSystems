@@ -45,6 +45,12 @@
       margin-bottom: 1rem;
     }
 
+    mark {
+      background-color: #FFD700;
+      color: #111111;
+      padding: 0 0.1em;
+    }
+
     a {
       color: red;
     }
@@ -86,6 +92,7 @@
           para = para.trim();
           if (!para) return '';
           para = para
+            .replace(/\*\*\*(.+?)\*\*\*/g, '<mark>$1</mark>')
             .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.+?)\*/g, '<em>$1</em>')
             .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank">$1</a>');
