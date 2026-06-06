@@ -78,7 +78,7 @@
   </style>
 </head>
 <body>
-  <h2>DECLINO SYSTEMS <span class="version">v.0.0.0</span></h2>
+  <h2 id="channel-title"></h2>
   <div class="line" style="margin-top: 1.3rem;"><a href="/notes">← notes</a></div>
 
   <div id="note-header" class="line" style="margin-top: 1.3rem;"></div>
@@ -112,7 +112,9 @@
           const title = lines[0].trim();
           const body = lines.slice(1).join('\n').trim();
           const dateStr = new Date(block.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
-          document.title = `${title} — Declino Systems`;
+          const channelTitle = (block.channels && block.channels[0]) ? block.channels[0].title : '';
+          document.title = `${title} — ${channelTitle}`;
+          document.getElementById('channel-title').textContent = channelTitle;
           document.getElementById('note-header').textContent = `${title} — ${dateStr}`;
           document.getElementById('note-body').innerHTML = renderMarkdown(body);
         });
