@@ -78,14 +78,15 @@
     fetch('https://api.are.na/v2/channels/notes_on_llm_personalities?per=100')
       .then(r => r.json())
       .then(data => {
-        const notes = (data.contents || []).filter(b => b.class === 'Text' && b.title);
+        const notes = (data.contents || []).filter(b => b.class === 'Text' && b.content);
         const ul = document.getElementById('notes-list');
         notes.forEach(n => {
+          const title = n.content.split('\n')[0].trim();
           const dateStr = new Date(n.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
           const li = document.createElement('li');
           const a = document.createElement('a');
           a.href = `note.html?id=${n.id}`;
-          a.textContent = n.title;
+          a.textContent = title;
           li.appendChild(a);
           li.appendChild(document.createTextNode(` — ${dateStr}`));
           ul.appendChild(li);

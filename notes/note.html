@@ -108,10 +108,13 @@
       fetch(`https://api.are.na/v2/blocks/${id}`)
         .then(r => r.json())
         .then(block => {
+          const lines = (block.content || '').split('\n');
+          const title = lines[0].trim();
+          const body = lines.slice(1).join('\n').trim();
           const dateStr = new Date(block.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-          document.title = `${block.title} — Declino Systems`;
-          document.getElementById('note-header').textContent = `${block.title} — ${dateStr}`;
-          document.getElementById('note-body').innerHTML = renderMarkdown(block.content || '');
+          document.title = `${title} — Declino Systems`;
+          document.getElementById('note-header').textContent = `${title} — ${dateStr}`;
+          document.getElementById('note-body').innerHTML = renderMarkdown(body);
         });
     }
   </script>
