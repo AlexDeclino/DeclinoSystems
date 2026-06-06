@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes — Declino Systems</title>
+  <style>
+    * {
+      font-family: monospace;
+      padding: 0;
+      line-height: 1.3rem;
+    }
+
+    body {
+      margin: 8px;
+      background-color: #ffffff;
+      color: #111111;
+    }
+
+    h2 {
+      margin-left: 0.83em;
+    }
+
+    .line {
+      margin-left: calc(2 * 0.83em);
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    a {
+      color: red;
+    }
+
+    a:visited {
+      color: #990000;
+    }
+
+    ul.notes-list {
+      list-style: disc;
+      padding-left: 2.5em;
+      margin-top: 0.3rem;
+    }
+
+    ul.notes-list li {
+      margin-bottom: 0.1rem;
+    }
+
+    @media (max-width: 480px) {
+      h2 { margin-left: 0; }
+      .line { margin-left: 0; }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body { background-color: #111111; color: #eeeeee; }
+      .line { color: #888; }
+    }
+
+    @media (prefers-color-scheme: light) {
+      body { background-color: #ffffff; color: #111111; }
+    }
+  </style>
+</head>
+<body>
+  <h2 id="channel-title"></h2>
+  <div class="line" style="margin-top: 1.3rem;"><a href="/notes">← notes</a></div>
+
+  <div class="line" style="margin-top: 1.3rem;">notes:</div>
+  <ul id="notes-list" class="notes-list line"></ul>
+
+  <script>
+    const slug = new URLSearchParams(window.location.search).get('slug');
+
+    if (slug) {
+      fetch(`https://api.are.na/v2/channels/${slug}?per=100`)
+        .then(r => r.json())
+        .then(data => {
+          document.title = `${data.title} — Declino Systems`;
+          document.getElementById('channel-title').textContent = data.title;
+
+          const notes = (data.contents || []).filter(b => b.class === 'Text' && b.content).reverse();
+          const ul = document.getElementById('notes-list');
+          notes.forEach(n => {
+            const title = n.content.split('\n')[0].trim();
+            const dateStr = new Date(n.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = `note.html?id=${n.id}&channel=${slug}`;
+            a.textContent = title;
+            li.appendChild(a);
+            li.appendChild(document.createTextNode(` — ${dateStr}`));
+            ul.appendChild(li);
+          });
+        });
+    }
+  </script>
+</body>
+</html>

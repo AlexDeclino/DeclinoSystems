@@ -79,7 +79,7 @@
 </head>
 <body>
   <h2 id="channel-title"></h2>
-  <div class="line" style="margin-top: 1.3rem;"><a href="/notes">← notes</a></div>
+  <div id="back-link" class="line" style="margin-top: 1.3rem;"></div>
 
   <div id="note-header" class="line" style="margin-top: 1.3rem;"></div>
   <div id="note-body" class="note-body"></div>
@@ -103,6 +103,12 @@
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
+    const channelSlug = params.get('channel');
+    const backLink = document.getElementById('back-link');
+    const a = document.createElement('a');
+    a.href = channelSlug ? `channel.html?slug=${channelSlug}` : '/notes';
+    a.textContent = '← notes';
+    backLink.appendChild(a);
 
     if (id) {
       fetch(`https://api.are.na/v2/blocks/${id}`)
