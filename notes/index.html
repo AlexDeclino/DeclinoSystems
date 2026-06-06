@@ -75,7 +75,7 @@
   <ul id="notes-list" class="notes-list line"></ul>
 
   <script>
-    fetch('https://api.are.na/v2/channels/subjectivity_notes?per=100')
+    fetch('https://api.are.na/v2/channels/notes_on_llm_personalities?per=100')
       .then(r => r.json())
       .then(data => {
         const notes = (data.contents || []).filter(b => b.class === 'Text' && b.title);
