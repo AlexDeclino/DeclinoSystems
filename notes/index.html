@@ -76,7 +76,8 @@
 
   <script>
     fetch('manifest.json')
-      .then(r => r.json())
+      .then(r => r.text())
+      .then(t => JSON.parse(t.replace(/,\s*]/g, ']')))
       .then(slugs => Promise.all(
         slugs.map(slug =>
           fetch(`${slug}.md`)
