@@ -75,30 +75,19 @@
   <ul id="notes-list" class="notes-list line"></ul>
 
   <script>
-    fetch('manifest.json')
-      .then(r => r.text())
-      .then(t => JSON.parse(t.replace(/,\s*]/g, ']')))
-      .then(slugs => Promise.all(
-        slugs.map(slug =>
-          fetch(`${slug}.md`)
-            .then(r => r.text())
-            .then(text => {
-              const lines = text.split('\n');
-              const title = lines[0].trim();
-              const dateStr = lines[1].trim();
-              return { slug, title, dateStr, date: new Date(dateStr) };
-            })
-        )
-      ))
-      .then(notes => {
-const ul = document.getElementById('notes-list');
+    fetch('https://api.are.na/v2/channels/subjectivity_notes?per=100')
+      .then(r => r.json())
+      .then(data => {
+        const notes = (data.contents || []).filter(b => b.class === 'Text' && b.title);
+        const ul = document.getElementById('notes-list');
         notes.forEach(n => {
+          const dateStr = new Date(n.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
           const li = document.createElement('li');
           const a = document.createElement('a');
-          a.href = `note.html?note=${n.slug}`;
+          a.href = `note.html?id=${n.id}`;
           a.textContent = n.title;
           li.appendChild(a);
-          li.appendChild(document.createTextNode(` — ${n.dateStr}`));
+          li.appendChild(document.createTextNode(` — ${dateStr}`));
           ul.appendChild(li);
         });
       });

@@ -102,20 +102,16 @@
     }
 
     const params = new URLSearchParams(window.location.search);
-    const slug = params.get('note');
+    const id = params.get('id');
 
-    if (slug) {
-      fetch(`${slug}.md`)
-        .then(r => r.text())
-        .then(text => {
-          const lines = text.split('\n');
-          const title = lines[0].trim();
-          const dateStr = lines[1].trim();
-          const body = lines.slice(2).join('\n').trim();
-
-          document.title = `${title} — Declino Systems`;
-          document.getElementById('note-header').textContent = `${title} — ${dateStr}`;
-          document.getElementById('note-body').innerHTML = renderMarkdown(body);
+    if (id) {
+      fetch(`https://api.are.na/v2/blocks/${id}`)
+        .then(r => r.json())
+        .then(block => {
+          const dateStr = new Date(block.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          document.title = `${block.title} — Declino Systems`;
+          document.getElementById('note-header').textContent = `${block.title} — ${dateStr}`;
+          document.getElementById('note-body').innerHTML = renderMarkdown(block.content || '');
         });
     }
   </script>
