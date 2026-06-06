@@ -91,8 +91,7 @@
         )
       ))
       .then(notes => {
-        notes.sort((a, b) => a.date - b.date);
-        const ul = document.getElementById('notes-list');
+const ul = document.getElementById('notes-list');
         notes.forEach(n => {
           const li = document.createElement('li');
           const a = document.createElement('a');
