@@ -111,7 +111,7 @@
           const lines = (block.content || '').split('\n');
           const title = lines[0].trim();
           const body = lines.slice(1).join('\n').trim();
-          const dateStr = new Date(block.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          const dateStr = new Date(block.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
           document.title = `${title} — Declino Systems`;
           document.getElementById('note-header').textContent = `${title} — ${dateStr}`;
           document.getElementById('note-body').innerHTML = renderMarkdown(body);

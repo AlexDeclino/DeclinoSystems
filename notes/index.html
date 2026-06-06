@@ -79,10 +79,11 @@
       .then(r => r.json())
       .then(data => {
         const notes = (data.contents || []).filter(b => b.class === 'Text' && b.content);
+        notes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         const ul = document.getElementById('notes-list');
         notes.forEach(n => {
           const title = n.content.split('\n')[0].trim();
-          const dateStr = new Date(n.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          const dateStr = new Date(n.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
           const li = document.createElement('li');
           const a = document.createElement('a');
           a.href = `note.html?id=${n.id}`;
