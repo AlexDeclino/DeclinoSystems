@@ -68,7 +68,7 @@
   </style>
 </head>
 <body>
-  <h2>DECLINO SYSTEMS <span class="version">v.0.0.0</span></h2>
+  <h2 id="channel-title"></h2>
   <div class="line" style="margin-top: 1.3rem;"><a href="/">← home</a></div>
 
   <div class="line" style="margin-top: 1.3rem;">notes:</div>
@@ -78,7 +78,8 @@
     fetch('https://api.are.na/v2/channels/notes_on_llm_personalities?per=100')
       .then(r => r.json())
       .then(data => {
-        const notes = (data.contents || []).filter(b => b.class === 'Text' && b.content);
+        document.getElementById('channel-title').textContent = data.title;
+        const notes = (data.contents || []).filter(b => b.class === 'Text' && b.content).reverse();
 const ul = document.getElementById('notes-list');
         notes.forEach(n => {
           const title = n.content.split('\n')[0].trim();
